@@ -36,9 +36,10 @@ form.addEventListener('submit', async (event) => {
     }
     iziToast.success({ title: 'Success', message: `Hooray! We found ${totalHits} images.` });
     renderImages(response.hits);
-    loadMoreButton.style.visibility = 'visible';
     if (response.hits.length < perPage) {
-      loadMoreButton.style.visibility = 'hidden';
+      iziToast.info({ title: 'Info', message: "We're sorry, but you've reached the end of search results." });
+    } else {
+      loadMoreButton.style.visibility = 'visible';
     }
   } catch (error) {
     iziToast.error({ title: 'Error', message: 'Failed to fetch images. Please try again later.' });
@@ -49,7 +50,7 @@ loadMoreButton.addEventListener('click', async () => {
   page += 1;
   try {
     const response = await fetchImages(query, page, perPage);
-    renderImages(response.hits);
+    renderImages(response.hits, true);
     if (page * perPage >= totalHits) {
       loadMoreButton.style.visibility = 'hidden';
       iziToast.info({ title: 'Info', message: "We're sorry, but you've reached the end of search results." });
@@ -74,7 +75,7 @@ async function fetchImages(query, page, perPage) {
   return response.data;
 }
 
-function renderImages(images) {
+function renderImages(images, shouldScroll = false) {
   const markup = images.map(image => {
     return `
       <div class="photo-card">
@@ -96,7 +97,9 @@ function renderImages(images) {
   } else {
     lightbox.refresh();
   }
-  smoothScroll();
+  if (shouldScroll) {
+    smoothScroll();
+  }
 }
 
 function smoothScroll() {

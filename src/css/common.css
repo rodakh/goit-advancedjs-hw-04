@@ -12,15 +12,11 @@ body {
   line-height: 1.5;
 }
 
-img {
-  display: block;
-  width: 100%;
-  max-width: 400px;
-}
-
 .gallery {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  max-width: 100%;
+  gap: 10px;
 }
 
 .load-more {
@@ -31,4 +27,8 @@ img {
   color: white;
   margin: 0 auto;
   visibility: hidden;
+}
+
+.photo-card img {
+  width: 100%;
 }
